@@ -5,24 +5,24 @@
 ## Project makefile
 ##
 
-DSRC	=	./src/
+DUT	=	./tests/
 
-SRC	=	$(DSRC)main.c		\
-		$(DSRC)get_next_line.c	\
+SRC	=	main.c			\
+		get_next_line.c	\
+
+SRC_UT =	get_next_line.c				\
+			$(DUT)test_get_next_line.c
 
 OBJ	=	$(SRC:.c=.o)
 
 NAME	=	EXEC
 
-CFLAGS	+= -Wall -Wextra -I./include -g
+CFLAGS	+= -Wall -Wextra -I. -g
 
 all:	$(NAME)
 
-$(NAME):	LIB $(OBJ)
-	gcc -o $(NAME) $(OBJ) -L./lib/my -lmy -g
-
-LIB:
-	make -C ./lib/my
+$(NAME):	$(OBJ)
+	gcc -o $(NAME) $(OBJ) -g
 
 clean:
 	rm -f  $(OBJ)
@@ -34,7 +34,7 @@ fclean:	clean
 
 re:	fclean all
 
-#tests_run:
-#gcc -o $(NAME) $(SRC_UT) tests/test_project.c -I./include -L./lib -lmy -lcriterion --coverage && ./$(NAME)
+tests_run:
+	gcc -o $(NAME) $(SRC_UT) -I. -lcriterion --coverage && ./$(NAME)
 
 .PHONY :        clean fclean re
