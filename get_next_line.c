@@ -76,11 +76,9 @@ char *get_next_line(int fd)
     int nb_bloc;
     int idx_newline_char;
 
-    nb_bloc = (size_buffer / READ_SIZE);
+    nb_bloc = (size_buffer / READ_SIZE) + 1;
     if ((size_buffer % READ_SIZE) != 0)
         nb_bloc++;
-    if (nb_bloc <= 1)
-        nb_bloc = 2;
     if (alloc_buffer(&buffer, nb_bloc, size_buffer) == MEXIT_ERROR)
         return NULL;
     idx_newline_char = read_file(fd, &buffer, &size_buffer, nb_bloc);
