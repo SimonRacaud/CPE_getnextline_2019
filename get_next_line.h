@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define READ_SIZE 8
+//#define READ_SIZE 128
 
 #define MEXIT_ERROR -1
 
