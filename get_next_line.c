@@ -58,7 +58,7 @@ int idx_newline_char)
 {
     char *line = malloc(sizeof(char) * idx_newline_char + 1);
 
-    if (!line)
+    if (!line || idx_newline_char == 0)
         return NULL;
     for (int i = 0; i < idx_newline_char; i++)
         line[i] = buffer[i];
