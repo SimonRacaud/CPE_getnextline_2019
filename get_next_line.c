@@ -33,11 +33,13 @@ static int check_get_newline_char_idx(char *buffer, int size)
 
 static int read_file(int fd, char **buffer, int *idx, int nb_bloc)
 {
-    int ret = -2;
+    static int ret = READ_SIZE;
     int ret_alloc = 0;
     int new_line_idx;
 
-    while (ret == -2 || ret == READ_SIZE) {
+    if (ret != READ_SIZE)
+        return EXIT_END;
+    while (ret == READ_SIZE) {
         ret = read(fd, ((*buffer) + (*idx)), READ_SIZE);
         if (ret == -1)
             return MEXIT_ERROR;
@@ -76,6 +78,8 @@ char *get_next_line(int fd)
     int nb_bloc;
     int idx_newline_char;
 
+    if (size_buffer == -1)
+        return NULL;
     nb_bloc = (size_buffer / READ_SIZE) + 1;
     if ((size_buffer % READ_SIZE) != 0)
         nb_bloc++;
@@ -86,6 +90,7 @@ char *get_next_line(int fd)
         free(buffer);
         buffer = NULL;
         return NULL;
-    }
+    } else if (idx_newline_char == EXIT_END)
+        size_buffer = -1;
     return get_line_and_clean_buffer(buffer, &size_buffer, idx_newline_char);
 }

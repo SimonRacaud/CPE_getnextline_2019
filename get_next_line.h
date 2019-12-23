@@ -17,6 +17,7 @@
 #endif
 
 #define MEXIT_ERROR -1
+#define EXIT_END -2
 
 char *get_next_line(int fd);
 
