@@ -22,12 +22,14 @@ static int alloc_buffer(char **buffer, int nb_bloc, int size_buffer)
     return EXIT_SUCCESS;
 }
 
-static int check_get_newline_char_idx(char *buffer, int size)
+static int check_get_newline_char_idx(char *buffer, int size, int ret)
 {
     for (int i = 0; i < size; i++) {
         if (buffer[i] == '\n')
             return i;
     }
+    if (ret != READ_SIZE)
+        return size;
     return -1;
 }
 
@@ -35,19 +37,19 @@ static int read_file(int fd, char **buffer, int *idx, int nb_bloc)
 {
     static int ret = READ_SIZE;
     int ret_alloc = 0;
-    int new_line_idx;
+    int new_line_idx = 0;
 
-    if (ret != READ_SIZE)
-        return EXIT_END;
-    while (ret == READ_SIZE) {
-        ret = read(fd, ((*buffer) + (*idx)), READ_SIZE);
+    while (!(new_line_idx == -1 && ret != READ_SIZE)) {
+        if (ret == READ_SIZE) {
+            ret = read(fd, ((*buffer) + (*idx)), READ_SIZE);
+            (*idx) += ret;
+        }
         if (ret == -1)
             return MEXIT_ERROR;
-        (*idx) += ret;
-        new_line_idx = check_get_newline_char_idx(*buffer, *idx);
+        new_line_idx = check_get_newline_char_idx(*buffer, *idx, ret);
         if (new_line_idx != -1)
             return new_line_idx;
-        if (ret == READ_SIZE)
+        else if (ret == READ_SIZE)
             ret_alloc = alloc_buffer(buffer, (++nb_bloc), *idx);
         if (ret_alloc == MEXIT_ERROR)
             return MEXIT_ERROR;

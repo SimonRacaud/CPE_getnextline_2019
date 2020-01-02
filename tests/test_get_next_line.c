@@ -12,7 +12,7 @@
 
 static const char *BIG_SENTENCE01 = "Une phrase tres longue, Une phrase tres"\
 " longue, Une phrase tres longue, Une phrase tres longue, Une phrase tres lo"\
-"ngue, Une phrase tres longue.";
+"ngue, Une phrase tres longue.FIN";
 
 int open_file(char *pathname)
 {
