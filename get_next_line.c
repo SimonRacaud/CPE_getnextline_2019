@@ -44,7 +44,7 @@ static int read_file(int fd, char **buffer, int *idx, int nb_bloc)
             ret = read(fd, ((*buffer) + (*idx)), READ_SIZE);
             (*idx) += ret;
         }
-        if (ret == -1)
+        if (ret == -1 || (ret == 0 && *idx == 0))
             return MEXIT_ERROR;
         new_line_idx = check_get_newline_char_idx(*buffer, *idx, ret);
         if (new_line_idx != -1)
@@ -62,7 +62,7 @@ int idx_newline_char)
 {
     char *line = malloc(sizeof(char) * idx_newline_char + 1);
 
-    if (!line)
+    if (!line || !(*size_buffer))
         return NULL;
     for (int i = 0; i < idx_newline_char; i++)
         line[i] = buffer[i];
