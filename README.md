@@ -1,4 +1,6 @@
 # Getnextline_CPE_2019
+Epitech's first-year project.
+
 A function which reads a file line per line.
 (like the function getline of the C standard library)
 
